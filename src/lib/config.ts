@@ -1,1 +1,1 @@
-export const title = 'Svelte shadcn + supabase'
+export const title = 'Svelte shadcn + Supabase'
