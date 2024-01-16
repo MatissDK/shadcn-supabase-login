@@ -8,7 +8,10 @@ COPY . /app
 ENV PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL} \
     PUBLIC_SUPABASE_ANON_KEY=${PUBLIC_SUPABASE_ANON_KEY}
 
-RUN cd /app && npm install && node -r dotenv/config build
+RUN echo "PUBLIC_SUPABASE_URL=$PUBLIC_SUPABASE_URL" > /app/.env && \
+    echo "PUBLIC_SUPABASE_ANON_KEY=$PUBLIC_SUPABASE_ANON_KEY" >> /app/.env
+
+RUN cd /app && npm install && npm run build
 
 FROM node:18-alpine
 
