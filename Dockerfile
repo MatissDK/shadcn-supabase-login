@@ -4,8 +4,6 @@ RUN mkdir /app
 
 COPY . /app
 
-RUN npm install dotenv
-
 # Set environment variables
 ENV PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL} \
     PUBLIC_SUPABASE_ANON_KEY=${PUBLIC_SUPABASE_ANON_KEY}
