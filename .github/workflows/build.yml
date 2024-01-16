@@ -1,0 +1,31 @@
+name: build + publish
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+        DATABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+        API_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Publish Docker Image
+        uses: matootie/github-docker@v3.1.0
+        with:
+          accessToken: ${{ github.token }}
+          containerRegistry: true
+      - name: Deploy on supabase shadcn svelte to CapRover
+        uses: caprover/deploy-from-github@v1.1.2
+        with:
+          server: https://uulauu.de
+          app: 'svelte-supabase-shadcn'
+          token: '${{ secrets.APP_TOKEN }}'
+          image: 'ghcr.io/matissdk/supabase-test:latest'
