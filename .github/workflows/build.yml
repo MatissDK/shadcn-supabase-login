@@ -28,4 +28,4 @@ jobs:
           server: https://uulauu.de
           app: 'svelte-supabase-shadcn'
           token: '${{ secrets.APP_TOKEN }}'
-          image: 'ghcr.io/matissdk/supabase-test:latest'
+          image: 'ghcr.io/matissdk/shadcn-supabase-login:latest'
