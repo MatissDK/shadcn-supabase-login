@@ -19,8 +19,8 @@ jobs:
           accessToken: ${{ github.token }}
           containerRegistry: true
           buildArgs: |
-            --build-arg DATABASE_URL=${{ secrets.PUBLIC_SUPABASE_URL }}
-            --build-arg API_KEY=${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+            DATABASE_URL=${{ secrets.PUBLIC_SUPABASE_URL }}
+            API_KEY=${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
       - name: Deploy on supabase shadcn svelte to CapRover
         uses: caprover/deploy-from-github@v1.1.2
         with:
