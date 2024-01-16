@@ -4,11 +4,13 @@ RUN mkdir /app
 
 COPY . /app
 
+RUN npm install dotenv
+
 # Set environment variables
 ENV PUBLIC_SUPABASE_URL=${PUBLIC_SUPABASE_URL} \
     PUBLIC_SUPABASE_ANON_KEY=${PUBLIC_SUPABASE_ANON_KEY}
 
-RUN cd /app && npm install dotenv && npm install && node -r dotenv/config build
+RUN cd /app && npm install && node -r dotenv/config build
 
 FROM node:18-alpine
 
