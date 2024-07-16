@@ -6,4 +6,4 @@
 	<title>{config.title}</title>
 </svelte:head>
 
-Hello friends! 👋
+Hello friends!!!!?????? this is page 👋

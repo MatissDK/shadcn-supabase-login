@@ -3,15 +3,15 @@
 	import Footer from '$lib/components/ux/Footer.svelte';
 	import Container from "$lib/components/ux/Container.svelte";
 	import { onMount } from 'svelte'
-	import { goto, invalidate } from '$app/navigation'
+	import { invalidate } from '$app/navigation'
 
 	export let data;
 
-	let { supabase, session } = data
-	$: ({ supabase, session } = data)
+	// let { supabase, session } = data
+	$: ({ session, supabase } = data);
 
 	onMount(() => {
-		const { data } = supabase.auth.onAuthStateChange((event, newSession) => {
+		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
 			if (newSession?.expires_at !== session?.expires_at) {
 				invalidate('supabase:auth')
 			}
@@ -21,10 +21,11 @@
 
 </script>
 
-
 <div class="flex min-h-screen flex-col pt-24">
 
 	<Header session={session} supabase={supabase}/>
+
+<!--	<pre>{JSON.stringify(data, null, 2)}</pre>-->
 
 	<Container>
 		<slot />

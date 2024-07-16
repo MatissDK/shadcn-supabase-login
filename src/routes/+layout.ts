@@ -3,6 +3,7 @@ import type { LayoutLoad } from './$types';
 import { createBrowserClient, createServerClient, isBrowser } from '@supabase/ssr';
 
 export const load: LayoutLoad = async ({ fetch, data, depends }) => {
+
   depends('supabase:auth')
 
   const supabase = isBrowser()
@@ -31,5 +32,9 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     data: { session },
   } = await supabase.auth.getSession()
 
-  return { supabase, session }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  return { supabase, session, user }
 }

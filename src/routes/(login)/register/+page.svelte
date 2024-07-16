@@ -1,10 +1,10 @@
 <script lang="ts">
 	import * as Alert from '$lib/components/ui/alert';
+	import * as Form from '$lib/components/ui/form';
 	import FormContainer from '$lib/components/ux/login/FormContainer.svelte';
 	import { Loader2, CheckCircle } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import { Input } from "$lib/components/ui/input";
-	import * as Form from '$lib/components/ui/form';
 	import { registerSchema } from './register.schema';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { toast } from 'svelte-sonner';
