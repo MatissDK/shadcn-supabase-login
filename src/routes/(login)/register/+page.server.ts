@@ -45,7 +45,7 @@ export const actions: Actions = {
 			});
 		}
 
-		return message(form, 'Registeration successful!');
+		return message(form, 'Registration successful!');
 
 	}
 }

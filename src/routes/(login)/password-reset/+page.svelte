@@ -17,26 +17,26 @@
 		delayMs: 300,
 		timeoutMs: 8000,
 		validators: zodClient(resetPasswordSchema),
-		// onResult: ({result}) => {
+		onUpdate: ({result}) => {
 
-		// 	if (result.status === 400 || result.status === 500) {
-		// 		const message = result.data.form.message;
-		// 		toast.error(message, {
-		// 			duration: 2000,
-		// 			position: "top-right",
-		// 		});
-		// 		return;
-		// 	}
+			if (result.status === 400 || result.status === 500) {
+				const message = result.data.form.message;
+				toast.error(message, {
+					duration: 2000,
+					position: "top-right",
+				});
+				return;
+			}
 
-		// 	if (result.status === 200) {
-		// 		const message = result.data.form.message;
-		// 		toast.success(message, {
-		// 			duration: 2000,
-		// 			position: "top-right",
-		// 		});
-		// 		goto('/');
-		// 	}
-		// },
+			if (result.status === 200) {
+				const message = result.data.form.message;
+				toast.success(message, {
+					duration: 2000,
+					position: "top-right",
+				});
+				goto('/');
+			}
+		},
 		taintedMessage: null
 	});
 
