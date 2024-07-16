@@ -1,22 +1,22 @@
 import type { Actions } from './$types'
+import type { PageServerLoad } from "./$types.js";
 import { fail, redirect } from "@sveltejs/kit";
-import { superValidate, setError, message } from 'sveltekit-superforms/server';
+import { superValidate, message } from "sveltekit-superforms";
 import { loginSchema } from './login.schema';
+import { zod } from 'sveltekit-superforms/adapters';
 
 
-  export const load = (async () => {
-	// Server API:
-	const form = await superValidate(loginSchema);
-  
-	// Unless you throw, always return { form } in load and form actions.
-	return { form };
-  });
+export const load: PageServerLoad = async () => {
+	return {
+	  form: await superValidate(zod(loginSchema)),
+	};
+  };
 
 export const actions: Actions = {
     default: async (event) => {
         const { request, url, locals: { supabase } } = event
 
-		const form = await superValidate(request, loginSchema);
+		const form = await superValidate(request, zod(loginSchema));
 
 		// const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 		// const a = await wait(4000);
@@ -42,6 +42,7 @@ export const actions: Actions = {
 			return message(form, 'Invalid login credentials', {
 				status: 403
 			});
+			// return setError(form, 'email', 'E-mail already exists.');
 			// if (err instanceof AuthApiError && err.status === 400) {
 			// 	return fail(400, {
 			// 		error: "Invalid email or password",

@@ -2,33 +2,32 @@
 	import { Loader2 } from 'lucide-svelte';
 	import * as config from '$lib/config';
 	import * as Form from '$lib/components/ui/form';
+	import { Input } from "$lib/components/ui/input";
 	import type { PageData } from './$types';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from "sveltekit-superforms";
 	import { loginSchema } from './login.schema';
 	import { toast } from "svelte-sonner";
 	import FormContainer from '$lib/components/ux/login/FormContainer.svelte';
+	import { zodClient } from "sveltekit-superforms/adapters";
 
 	export let data: PageData;
 
 	const superFrm = superForm(data.form, {
-		delayMs: 300,
+		delayMs: 600,
 		timeoutMs: 8000,
-		validators: loginSchema,
-		onResult: (result) => {
-			if (result.result.status === 403) {
-				const message = result.result.data.form.message;
-				toast.error(message, {
+		validators: zodClient(loginSchema),
+		onUpdate(event) {
+			if (event.form.message && event.result.status === 403) {
+				toast.error(event.form.message, {
 					duration: 2000,
 					position: "top-right",
 				});
 			}
-		
 		},
 		taintedMessage: null
 	});
 
-	let delayed = superFrm.delayed;
-	let errors = superFrm.errors;
+	const { form: formData, enhance, errors, delayed } = superFrm;
 </script>
 
 <svelte:head>
@@ -42,43 +41,39 @@
 		<p class="text-sm text-muted-foreground">Sign in to your account</p>
 	</div>
 	<div class="grid gap-6">
-		<Form.Root method="POST" schema={loginSchema} controlled form={superFrm} let:config>
-			<Form.Field {config} name="email">
-				<Form.Item>
+		<form use:enhance method="POST">
+
+			<Form.Field form="{superFrm}" name="email">
+				<Form.Control let:attrs>
 					<Form.Label>Email</Form.Label>
-					<Form.Input
-						class={$errors.email ? 'border-destructive' : ''}
-						id="email"
-						name="email"
-						placeholder="name@example.com"
-					/>
-					<Form.Validation class="!mb-4 text-xs" />
-				</Form.Item>
+					<Input {...attrs}
+							class={$errors.email ? 'border-destructive' : ''} 
+							bind:value={$formData.email} />
+				</Form.Control>
+				<Form.FormFieldErrors class="!mb-4 text-xs" />
 			</Form.Field>
 
-			<Form.Field {config} name="password">
-				<Form.Item>
+			<Form.Field form="{superFrm}" name="password">
+				<Form.Control let:attrs>
 					<Form.Label class="flex justify-between text-sm">
 						<span>Password</span>
 						<span><a href="/forgot-password" class="text-primary text-xs">Forgot password?</a></span>
 					</Form.Label>
-					<Form.Input
-						class={$errors.password ? 'border-destructive' : ''}
-						id="password"
-						name="password"
-						type="password"
-						placeholder="••••••••"
-					/>
-					<Form.Validation class="!mb-4 text-xs" />
-				</Form.Item>
-			</Form.Field>
+					 <Input class={$errors.password ? 'border-destructive' : ''}
+					  		type="password" 
+							placeholder="••••••••" 
+							{...attrs}
+							bind:value={$formData.password}/>
+				</Form.Control>
+				<Form.FormFieldErrors class="!mb-4 text-xs" />
+			 </Form.Field>
 			<Form.Button class="w-full">
 				{#if $delayed}
-					<Loader2 class="mr-2 h-4 w-4 animate-spin" />
-				{/if}
+					 <Loader2 class="mr-2 h-4 w-4 animate-spin" />
+			    {/if}
 				Sing In
 			</Form.Button>
-		</Form.Root>
+		</form>
 
 		<p class="px-8 text-center text-sm text-muted-foreground">
 			Don't have an account?

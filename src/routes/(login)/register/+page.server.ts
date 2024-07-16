@@ -4,9 +4,10 @@ import { fail } from "@sveltejs/kit";
 import { superValidate, message } from 'sveltekit-superforms/server';
 import { registerSchema } from './register.schema';
 import { AuthApiError } from '@supabase/supabase-js';
+import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = (async () => {
-	const form = await superValidate(registerSchema);
+	const form = await superValidate(zod(registerSchema));
 	return { form };
 });
 
@@ -15,7 +16,7 @@ export const actions: Actions = {
 
 		const { request, url, locals: { supabase } } = event
 
-		const form = await superValidate(request, registerSchema);
+		const form = await superValidate(request, zod(registerSchema));
 
 		// Convenient validation check:
 		if (!form.valid) {
