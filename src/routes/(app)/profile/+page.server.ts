@@ -1,16 +1,14 @@
-import { fail, redirect } from '@sveltejs/kit'
+import { redirect } from '@sveltejs/kit'
 
-export const load = async ({ locals: { supabase, getSession } }) => {
+export const load = async ({ locals: { supabase, safeGetSession } }) => {
 
-    console.log('Profile page load!!');
+    const {session} = await safeGetSession()
 
-    const session = await getSession()
-  
     if (!session) {
       throw redirect(303, '/')
     }
 
-    let { data: profile, error } = await supabase
+    const { data: profile } = await supabase
       .from('profiles')
       .select('*')
       .maybeSingle();

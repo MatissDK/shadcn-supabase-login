@@ -4,9 +4,11 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import FormContainer from '$lib/components/ux/login/FormContainer.svelte';
 	import type { PageData } from './$types';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm } from "sveltekit-superforms";
 	import { forgotPasswordSchema } from './forgot-password.schema';
 	import { toast } from 'svelte-sonner';
+	import { Input } from "$lib/components/ui/input";
+	import { zodClient } from "sveltekit-superforms/adapters";
 
 	export let data: PageData;
 
@@ -15,8 +17,8 @@
 	const superFrm = superForm(data.form, {
 		delayMs: 300,
 		timeoutMs: 8000,
-		validators: forgotPasswordSchema,
-		onResult: ({ result }) => {
+		validators: zodClient(forgotPasswordSchema),
+		onUpdate: ({ result }) => {
 			if (result.status === 200) {
 				displaySuccess = true;
 				const message = result.data.form.message;
@@ -38,7 +40,7 @@
 		taintedMessage: null
 	});
 
-	let delayed = superFrm.delayed;
+	const { form: formData, enhance, errors, delayed } = superFrm;
 </script>
 
 <svelte:head>
@@ -60,13 +62,17 @@
 			</p>
 		</div>
 		<div class="grid gap-6">
-			<Form.Root method="POST" schema={forgotPasswordSchema} controlled form={superFrm} let:config>
-				<Form.Field {config} name="email">
-					<Form.Item>
+			<form  use:enhance method="POST">
+
+				<Form.Field form="{superFrm}" name="email">
+					<Form.Control let:attrs>
 						<Form.Label>Email</Form.Label>
-						<Form.Input id="email" name="email" placeholder="name@example.com" />
-						<Form.Validation class="!mb-4 text-xs" />
-					</Form.Item>
+						<Input {...attrs}
+								class={$errors.email ? 'border-destructive' : ''} 
+								bind:value={$formData.email}
+								placeholder="name@example.com" />
+					</Form.Control>
+					<Form.FormFieldErrors class="!mb-4 text-xs" />
 				</Form.Field>
 				<Form.Button class="w-full">
 					{#if $delayed}
@@ -74,7 +80,7 @@
 					{/if}
 					Send Reset Email
 				</Form.Button>
-			</Form.Root>
+			</form>
 
 			<p class="px-8 text-center text-sm text-muted-foreground">
 				Already have an account?

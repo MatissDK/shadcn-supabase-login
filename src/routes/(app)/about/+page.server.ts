@@ -1,10 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit'
 
-export const load = async ({ locals: { supabase, getSession } }) => {
+export const load = async ({ locals: { supabase, safeGetSession } }) => {
 
-    console.log('About page load!!');
-
-    const session = await getSession()
+  const {session} = await safeGetSession()
   
     if (!session) {
       throw redirect(303, '/')
