@@ -32,16 +32,22 @@ export const actions: Actions = {
         const email = form.data.email as string;
         const password = form.data.password as string;
 
+				console.log({email});
+				console.log({password});
+
         const { data, error: err } = await supabase.auth.signInWithPassword({
-			email: email,
-			password: password,
+					email: email,
+					password: password,
 		})
+
+			console.log({data});
+			console.log({err});
 
         if (err) {
             // console.log('Error in sign up!! ', err);
-			return message(form, 'Invalid login credentials', {
-				status: 403
-			});
+					return message(form, 'Invalid login credentials', {
+						status: 403
+					});
 			// return setError(form, 'email', 'E-mail already exists.');
 			// if (err instanceof AuthApiError && err.status === 400) {
 			// 	return fail(400, {

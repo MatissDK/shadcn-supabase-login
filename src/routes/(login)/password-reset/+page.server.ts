@@ -5,9 +5,9 @@ import { resetPasswordSchema } from './password-reset.schema';
 import { AuthSessionMissingError } from '@supabase/supabase-js';
 import { zod } from 'sveltekit-superforms/adapters';
 
-export const load = (async ({ locals: { getSession } }) => {
+export const load = (async ({ locals: { safeGetSession } }) => {
 
-  const session = await getSession()
+  const { session } = await safeGetSession()
 
   // no need to reset, when we have valid session
   if (session) {
