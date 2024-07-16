@@ -1,6 +1,10 @@
+<script lang='ts'>
+    import * as config from '$lib/config';
+</script>
+
 <blockquote class="space-y-2">
     <p class="text-lg">
-        &ldquo;You miss 100% of the shots you don’t take. - Wayne Gretzky&rdquo;
+        &ldquo;{config.quote}&rdquo;
     </p>
-    <footer class="text-sm">Michael Scott</footer>
+    <footer class="text-sm">{config.quote_author}</footer>
 </blockquote>

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Loader2 } from 'lucide-svelte';
-	import * as config from '$lib/config';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from "$lib/components/ui/input";
 	import type { PageData } from './$types';
